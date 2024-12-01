@@ -5,8 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
-
     <title>Список задач</title>
+    <style>
+        .task-columns {
+            display: flex;
+            justify-content: space-between;
+        }
+        main {
+            width: 80%;
+        }
+
+        .task-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        button.delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .h1Test {
+            text-align: center;
+        }
+
+        .history-button {
+            margin-left: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* Модальное окно */
+        dialog {
+            border: none;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+        dialog form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        dialog input[type="text"] {
+            margin: 10px;
+            padding: 10px;
+            width: 80%;
+        }
+        dialog button {
+            margin: 10px;
+            padding: 10px;
+        }
+
+        /* Модальное окно для истории */
+        #history-modal {
+            width: 80%;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        button.restore-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -22,51 +101,246 @@
                 <li><a href="task_main.html" class="active">Список задач</a></li>
                 <li><a href="about.html">О приложении</a></li>
             </ul>
-            
         </nav>
     </header>
     <main>
-        <h1 class = "h1Test" >Список задач</h1>
+        <h1 class="h1Test">Список задач</h1>
         <button id="add-task-btn" class="h1Test">Добавить задачу</button>
-        <div class="task-list">
-            <div class="task-item">
-                <div class="task-name">Task 1</div>
-                <div class="task-status">
-                    <input type="checkbox" id="working-1">
-                    <label for="working-1">В работе</label>
-                </div>
-                <div class="task-status">
-                    <input type="checkbox" id="completed-1">
-                    <label for="completed-1">Выполнено</label>
-                </div>
-                <button class="delete-button">Удалить</button>
+
+        <!-- Модальное окно для добавления задачи -->
+        <dialog id="task-modal">
+            <h2>Добавить новую задачу</h2>
+            <form id="task-form">
+                <input type="text" id="task-name" placeholder="Введите имя задачи" required />
+                <button type="submit">Добавить</button>
+                <button type="button" value="cancel">Отмена</button>
+            </form>
+        </dialog>
+
+        <!-- Модальное окно для истории изменений -->
+        <dialog id="history-modal">
+            <h2>История изменений</h2>
+            <div id="history-list"></div>
+            <button value="cancel">Закрыть</button>
+        </dialog>
+
+        <div class="task-columns">
+            <div class="task-column" data-column="tasks">
+                <h2>Задачи</h2>
             </div>
-            <div class="task-item">
-                <div class="task-name">Task 2</div>
-                <div class="task-status">
-                    <input type="checkbox" id="working-2">
-                    <label for="working-2">В работе</label>
-                </div>
-                <div class="task-status">
-                    <input type="checkbox" id="completed-2">
-                    <label for="completed-2">Выполнено</label>
-                </div>
-                <button class="delete-button">Удалить</button>
+            <div class="task-column" data-column="in-progress">
+                <h2>В работе</h2>
+            </div>
+            <div class="task-column" data-column="completed">
+                <h2>Выполненные</h2>
             </div>
         </div>
+        <button id="history-button" class="history-button">История изменений</button>
     </main>
-    <dialog id="task-modal" class="forTaskModal">
-        <form method="dialog">
-            <h2>Добавить задачу</h2>
-            <input type="text" placeholder="Введите название задачи" required>
-            <menu>
-                <button type="button" value="cancel">Отмена</button>
-                <button value="submit">Добавить</button>
-            </menu>
-        </form>
-    </dialog>
-    <script src="bundle.js"></script>
-    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    loadTasks();
+});
+
+// Функция для загрузки задач из локального хранилища
+function loadTasks() {
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || {
+        tasks: [],
+        inProgress: [],
+        completed: []
+    };
+
+    renderColumn("tasks", tasks.tasks);
+    renderColumn("in-progress", tasks.inProgress);
+    renderColumn("completed", tasks.completed);
+}
+
+function renderColumn(columnId, tasks) {
+    const column = document.querySelector(`.task-column[data-column="${columnId}"]`);
+    column.innerHTML = `<h2>${getColumnTitle(columnId)}</h2>`;
+    tasks.forEach((task) => {
+        const taskItem = document.createElement("div");
+        taskItem.classList.add("task-item");
+        taskItem.innerHTML = `
+            <input type="checkbox" id="${task.id}" ${task.completed ? "checked" : ""} data-column="${columnId}" />
+            <label for="${task.id}" class="task-name">${task.name}</label>
+            ${columnId === "completed" ? `<button class="delete-button" data-id="${task.id}">Удалить</button>` : ""}
+        `;
+        column.appendChild(taskItem);
+    });
+
+    addEventListeners(columnId);
+}
+
+function getColumnTitle(columnId) {
+    switch (columnId) {
+        case "tasks": return "Задачи";
+        case "in-progress": return "В работе";
+        case "completed": return "Выполненные";
+    }
+}
+
+function addEventListeners(columnId) {
+    document.querySelectorAll(`input[data-column="${columnId}"]`).forEach(checkbox => {
+        checkbox.addEventListener("change", function() {
+            moveTaskToNextColumn(this);
+        });
+    });
+
+    if (columnId === "completed") {
+        document.querySelectorAll(".delete-button").forEach(button => {
+            button.addEventListener("click", function() {
+                deleteTask(this);
+            });
+        });
+    }
+}
+
+function moveTaskToNextColumn(checkbox) {
+    const taskId = checkbox.id;
+    const taskName = checkbox.nextElementSibling.textContent;
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || { tasks: [], inProgress: [], completed: [] };
+
+    let task;
+    if (checkbox.checked) {
+        if (checkbox.parentElement.closest('.task-column').dataset.column === "tasks") {
+            task = { id: taskId, name: taskName, completed: false };
+            tasks.inProgress.push(task);
+            tasks.tasks = tasks.tasks.filter(t => t.id !== taskId);
+            addHistory(`Задача "${taskName}" перемещена в "В работе"`, taskId, "in-progress");
+        } else if (checkbox.parentElement.closest('.task-column').dataset.column === "in-progress") {
+            task = { id: taskId, name: taskName, completed: false };
+            tasks.completed.push(task);
+            tasks.inProgress = tasks.inProgress.filter(t => t.id !== taskId);
+            addHistory(`Задача "${taskName}" перемещена в "Выполненные"`, taskId, "completed");
+        }
+    } else {
+        if (checkbox.parentElement.closest('.task-column').dataset.column === "in-progress") {
+            task = { id: taskId, name: taskName, completed: false };
+            tasks.tasks.push(task);
+            tasks.inProgress = tasks.inProgress.filter(t => t.id !== taskId);
+            addHistory(`Задача "${taskName}" перемещена в "Задачи"`, taskId, "tasks");
+        } else if (checkbox.parentElement.closest('.task-column').dataset.column === "completed") {
+            task = { id: taskId, name: taskName, completed: false };
+            tasks.inProgress.push(task);
+            tasks.completed = tasks.completed.filter(t => t.id !== taskId);
+            addHistory(`Задача "${taskName}" перемещена в "В работе"`, taskId, "in-progress");
+        }
+    }
+
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    loadTasks();
+}
+
+function deleteTask(button) {
+    const taskId = button.getAttribute("data-id");
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || { tasks: [], inProgress: [], completed: [] };
+    const taskName = tasks.completed.find(task => task.id === taskId)?.name;
+
+    tasks.completed = tasks.completed.filter(task => task.id !== taskId);
+    addHistory(`Задача "${taskName}" удалена`, taskId, "completed");
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    loadTasks();
+}
+
+function addHistory(message, taskId = null, column = null) {
+    const history = JSON.parse(localStorage.getItem("history")) || [];
+    history.push({ message, timestamp: new Date().toLocaleString(), taskId, column });
+    localStorage.setItem("history", JSON.stringify(history));
+}
+
+// Восстановление задачи из истории
+function restoreTask(taskId) {
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || { tasks: [], inProgress: [], completed: [] };
+    const history = JSON.parse(localStorage.getItem("history")) || [];
+    const restoredTask = history.find(item => item.taskId === taskId);
+
+    if (restoredTask) {
+        const task = { id: taskId, name: restoredTask.message.split(' ')[1], completed: false };
+
+        // Восстановление задачи в правильную колонку на основе истории
+        switch (restoredTask.column) {
+            case "tasks":
+                tasks.tasks.push(task);
+                break;
+            case "in-progress":
+                tasks.inProgress.push(task);
+                break;
+            case "completed":
+                tasks.completed.push(task);
+                break;
+        }
+
+        // Обновляем данные и перерисовываем задачи
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        loadTasks();
+        addHistory(`Задача "${task.name}" восстановлена в "${restoredTask.column}"`, taskId, restoredTask.column);
+    }
+}
+
+// Открытие модального окна истории
+document.getElementById("history-button").addEventListener("click", function () {
+    const history = JSON.parse(localStorage.getItem("history")) || [];
+    const historyModal = document.getElementById("history-modal");
+    const historyList = document.getElementById("history-list");
+    historyList.innerHTML = "";
+
+    history.forEach(item => {
+        const historyItem = document.createElement("div");
+        historyItem.classList.add("history-item");
+        historyItem.innerHTML = `
+            <p>${item.timestamp}: ${item.message}</p>
+            <button class="restore-button" onclick="restoreTask('${item.taskId}')">Восстановить</button>
+        `;
+        historyList.appendChild(historyItem);
+    });
+
+    historyModal.showModal();
+});
+
+// Открытие модального окна добавления задачи
+document.getElementById("add-task-btn").addEventListener("click", function() {
+    document.getElementById("task-modal").showModal();
+});
+
+// Закрытие модальных окон
+document.querySelectorAll("dialog button[value='cancel']").forEach(button => {
+    button.addEventListener("click", function() {
+        this.closest("dialog").close();
+    });
+});
+
+// Добавление задачи через форму
+document.getElementById("task-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const taskName = document.getElementById("task-name").value;
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || { tasks: [], inProgress: [], completed: [] };
+
+    // Генерация уникального id на основе текущего времени
+    const taskId = `task-${Date.now()}`;
+
+    // Создание новой задачи
+    const newTask = { id: taskId, name: taskName, completed: false };
+    tasks.tasks.push(newTask);
+
+    // Добавление в историю с правильным taskId
+    addHistory(`Задача "${taskName}" добавлена`, taskId, "tasks");
+
+    // Сохранение задач в локальное хранилище
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+
+    // Перерисовываем задачи
+    loadTasks();
+
+    // Закрытие модального окна
+    document.getElementById("task-modal").close();
+});
+
+
+    </script>
+
     <script src="scripts.js"></script>
 </body>
 </html>

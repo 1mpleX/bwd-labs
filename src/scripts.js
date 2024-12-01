@@ -24,3 +24,5 @@ document.getElementById('task-modal').addEventListener('click', (e) => {
 document.querySelector('button[value="cancel"]').addEventListener('click', () => {
     document.getElementById('task-modal').close();
 });
+
+

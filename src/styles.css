@@ -1,4 +1,8 @@
 /* Общие стили */
+*{
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -50,9 +54,10 @@ header {
 }
 
 .task-item {
+    width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: normal;
+    align-items: center;
     background-color: #fff;
     padding: 10px 20px;
     border: 1px solid #ccc;
@@ -60,6 +65,8 @@ header {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease-in-out;
     gap: 20px;
+    min-height: 40px;
+    margin-bottom: 10px;
 }
 
 .task-item:hover {
@@ -194,7 +201,10 @@ menu button[value="submit"]:hover {
     height: 20px; /* Высота остается неизменной */
     
 }
-
+.task-columns{
+    display: flex;
+    gap: 20px;
+}
 .burger-icon {
     width: 40px;
     height: 3px;
@@ -273,16 +283,11 @@ menu button[value="submit"]:hover {
 
     .task-item {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
     }
 
     .task-status {
         margin-top: 10px;
-    }
-
-    .delete-button {
-        margin-top: 10px;
-        width: 100%;
     }
 }
 
@@ -325,6 +330,13 @@ menu button[value="submit"]:hover {
         padding: 10px 15px;
     }
 }
+
+@media (max-width: 768px) {
+    .task-columns{
+        flex-direction: column;
+    }
+}
+
 .h1Test {
     margin-left: 15px;
 }
