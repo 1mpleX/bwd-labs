@@ -1,0 +1,330 @@
+/* Общие стили */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+main {
+    margin-top: 50px;
+}
+/* Шапка */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #333;
+    z-index: 1000;
+}
+.main-images {
+    max-width: 100%;
+    height: auto;
+}
+  
+
+
+.nav-links li {
+    margin: 0 20px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+}
+
+.nav-links li a.active {
+    font-weight: bold;
+    color: black;
+}
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 700px;
+    margin: 140px auto 20px;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: normal;
+    background-color: #fff;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    gap: 20px;
+}
+
+.task-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.task-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.task-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+button.delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button.delete-button:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+/* Кнопка добавления задачи */
+#add-task-btn {
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#add-task-btn:hover {
+    background-color: #0009;
+    transform: scale(1.05);
+}
+
+/* Модальное окно */
+dialog {
+    width: 300px;
+    padding: 25px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    background: #fff;
+    position: fixed;
+    z-index: 1000;
+    max-width: 90%;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+dialog h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+}
+
+dialog input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+dialog input[type="text"]:focus {
+    border-color: #000;
+}
+
+menu {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+menu button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+menu button[value="cancel"] {
+    background-color: #000;
+    color: white;
+}
+
+menu button[value="cancel"]:hover {
+    background-color: #000;
+    transform: scale(1.05);
+}
+
+menu button[value="submit"] {
+    background-color: #000;
+    color: white;
+}
+
+menu button[value="submit"]:hover {
+    background-color: #000;
+    transform: scale(1.05);
+}
+
+.burger-menu {
+    display: none;
+    cursor: pointer;
+    margin: 10px;
+    position: relative;
+    width: 30px; /* Увеличиваем ширину для удобства */
+    height: 20px; /* Высота остается неизменной */
+    
+}
+
+.burger-icon {
+    width: 40px;
+    height: 3px;
+    background: white;
+    margin: 5px 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 10px 0;
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+    /* Бургер-меню будет показываться только на мобильных */
+    .burger-menu {
+        display: block;
+        cursor: pointer;
+    }
+
+    /* Навигационное меню будет скрыто по умолчанию */
+    .nav-links {
+        display: none; /* Скрыто по умолчанию */
+        position: absolute;
+        top: 40px;
+        left: 0;
+        background: #333;
+        width: 100%;
+        flex-direction: column;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+
+    }
+
+    /* Когда меню открыто */
+    .nav-links.show {
+        display: flex; /* Показываем меню */
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Анимация для бургер-меню в активном состоянии */
+    .burger-menu.active .burger-icon:nth-child(1) {
+        transform: rotate(45deg); /* Первая линия вращается */
+        position: absolute;
+        top: 8px; /* Изменяем позицию */
+    }
+
+    .burger-menu.active .burger-icon:nth-child(2) {
+        opacity: 0; /* Центральная линия исчезает */
+    }
+
+    .burger-menu.active .burger-icon:nth-child(3) {
+        transform: rotate(-45deg); /* Третья линия вращается в противоположную сторону */
+        position: absolute;
+        top: 8px; /* Изменяем позицию */
+    }
+
+    /* Стандартное состояние бургер-меню */
+    .burger-icon {
+        width: 25px;
+        height: 3px;
+        background: white;
+        margin: 5px 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+
+    /* Дополнительные стили для задач на мобильных */
+    .task-list {
+        margin-top: 200px; /* Увеличиваем отступ для мобильных устройств */
+    }
+
+    .task-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .task-status {
+        margin-top: 10px;
+    }
+
+    .delete-button {
+        margin-top: 10px;
+        width: 100%;
+    }
+}
+
+
+/* Для планшетов */
+@media (max-width: 1024px) {
+    .task-list {
+        margin-top: 150px; /* Увеличим отступ для планшетов */
+    }
+
+    .task-item {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .task-status {
+        flex-direction: row;
+    }
+}
+
+/* Для десктопов */
+@media (min-width: 1025px) {
+    .nav-links {
+        display: flex;
+    }
+
+    .task-list {
+        max-width: 900px; /* Увеличим ширину списка задач для десктопов */
+    }
+
+    .task-item {
+        padding: 20px 25px;
+    }
+
+    .task-name {
+        font-size: 18px;
+    }
+
+    .delete-button {
+        padding: 10px 15px;
+    }
+}
+.h1Test {
+    margin-left: 15px;
+}

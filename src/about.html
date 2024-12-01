@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <title>О приложении</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="burger-menu">
+                <div class="burger-icon"></div>
+                <div class="burger-icon"></div>
+                <div class="burger-icon"></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="projects.html">Проекты</a></li>
+                <li><a href="task_main.html" >Список задач</a></li>
+                <li><a href="about.html" class="active">О приложении</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="about-app">
+            <h1>О приложении</h1>
+            <p>Это простое веб-приложение для управления задачами. Оно позволяет создавать, редактировать и удалять задачи, отслеживать их статус, а также организовывать их в проекты.</p>
+            <p>Приложение было создано для повышения личной продуктивности, удобства и упрощения процесса работы с задачами.</p>
+
+            <h2>Основные функции:</h2>
+            <ul>
+                <li>Создание и удаление задач.</li>
+                <li>Изменение статуса задач (в работе или выполнено).</li>
+                <li>Организация задач по проектам.</li>
+                <li>Просмотр списка задач и фильтрация их по статусу.</li>
+            </ul>
+
+            <h2>Технологии, использованные в приложении:</h2>
+            <ul>
+                <li>HTML5, CSS3 для вёрстки и стилизации.</li>
+                <li>JavaScript для динамических элементов и логики.</li>
+                <li>Сохранение данных в браузере (например, через LocalStorage) для обеспечения работы без серверной части.</li>
+            </ul>
+
+            <a href="index.html" class="back-to-home">Вернуться на главную</a>
+        </section>
+    </main>
+    <script src="bundle.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
