@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+    <title>Список задач</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="burger-menu">
+                <div class="burger-icon"></div>
+                <div class="burger-icon"></div>
+                <div class="burger-icon"></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="projects.html">Проекты</a></li>
+                <li><a href="task_main.html" class="active">Список задач</a></li>
+                <li><a href="about.html">О приложении</a></li>
+            </ul>
+            
+        </nav>
+    </header>
+    <main>
+        <h1 class = "h1Test" >Список задач</h1>
+        <button id="add-task-btn" class="h1Test">Добавить задачу</button>
+        <div class="task-list">
+            <div class="task-item">
+                <div class="task-name">Task 1</div>
+                <div class="task-status">
+                    <input type="checkbox" id="working-1">
+                    <label for="working-1">В работе</label>
+                </div>
+                <div class="task-status">
+                    <input type="checkbox" id="completed-1">
+                    <label for="completed-1">Выполнено</label>
+                </div>
+                <button class="delete-button">Удалить</button>
+            </div>
+            <div class="task-item">
+                <div class="task-name">Task 2</div>
+                <div class="task-status">
+                    <input type="checkbox" id="working-2">
+                    <label for="working-2">В работе</label>
+                </div>
+                <div class="task-status">
+                    <input type="checkbox" id="completed-2">
+                    <label for="completed-2">Выполнено</label>
+                </div>
+                <button class="delete-button">Удалить</button>
+            </div>
+        </div>
+    </main>
+    <dialog id="task-modal" class="forTaskModal">
+        <form method="dialog">
+            <h2>Добавить задачу</h2>
+            <input type="text" placeholder="Введите название задачи" required>
+            <menu>
+                <button type="button" value="cancel">Отмена</button>
+                <button value="submit">Добавить</button>
+            </menu>
+        </form>
+    </dialog>
+    <script src="bundle.js"></script>
+    
+    <script src="scripts.js"></script>
+</body>
+</html>
